@@ -118,7 +118,7 @@ func (h *Handlers) GetMetaTagsHandler(w http.ResponseWriter, r *http.Request) {
 	siteid := r.URL.Query().Get("siteid")
 	tag := r.URL.Query().Get("tag")
 	fmt.Println(siteid)
-	if len(siteid) > 0 {
+	if len(siteid) > 0 && len(tag) == 0 {
 		parse, _ := strconv.ParseUint(siteid, 10, 64)
 		output, err = h.MetaTagUseCase.ExecuteFindBySiteID(parse)
 		if err != nil {
@@ -126,7 +126,11 @@ func (h *Handlers) GetMetaTagsHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else if len(tag) > 0 {
-		output, err = h.MetaTagUseCase.ExecuteFindByTag(tag)
+		var num uint64
+		if len(siteid) > 0 {
+			num, _ = strconv.ParseUint(siteid, 10, 64)
+		}
+		output, err = h.MetaTagUseCase.ExecuteFindByTag(tag, num)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -171,5 +175,37 @@ func (h *Handlers) CreateWordsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) GetWordsHandler(w http.ResponseWriter, r *http.Request) {
+	var output any
+	var err error
+	siteid := r.URL.Query().Get("siteid")
+	value := r.URL.Query().Get("value")
+	fmt.Println(siteid)
+	if len(siteid) > 0 && len(value) == 0 {
+		parse, _ := strconv.ParseUint(siteid, 10, 64)
+		output, err = h.WordUseCase.ExecuteFindBySiteID(parse)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	} else if len(value) > 0 {
+		var num uint64
+		if len(siteid) > 0 {
+			num, _ = strconv.ParseUint(siteid, 10, 64)
+		}
+		output, err = h.WordUseCase.ExecuteFindByValue(value, num)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	} else {
+		output, err = h.WordUseCase.ExecuteFindAll()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(output)
 }

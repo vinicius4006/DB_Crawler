@@ -50,7 +50,7 @@ func main() {
 	r.HandleFunc("/api/metatags", handlers.GetMetaTagsHandler).Queries("siteid", "{siteid}", "tag", "{tag}").Methods("GET")
 
 	r.HandleFunc("/api/words", handlers.CreateWordsHandler).Methods("POST")
-	r.HandleFunc("/api/words", handlers.GetMetaTagsHandler).Queries("siteid", "{siteid}", "value", "{value}").Methods("GET")
+	r.HandleFunc("/api/words", handlers.GetWordsHandler).Queries("siteid", "{siteid}", "value", "{value}").Methods("GET")
 
 	err = http.ListenAndServe(":5050", r)
 

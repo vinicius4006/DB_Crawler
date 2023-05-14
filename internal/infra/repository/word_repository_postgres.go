@@ -27,16 +27,20 @@ func (w *WordRepositoryPostgres) Create(word *model.Word) error {
 
 func (w *WordRepositoryPostgres) FindBySiteID(id uint64) ([]*model.Word, error) {
 	var words []*model.Word
-	result := w.db.Where("site_id = ?", id).Find(&words)
+	result := w.db.Preload("Ref").Where("site_id = ?", id).Find(&words)
 	if result.Error != nil {
 		return words, result.Error
 	}
 	return words, nil
 }
-func (w *WordRepositoryPostgres) FindByValue(value string) ([]*model.Word, error) {
+func (w *WordRepositoryPostgres) FindByValue(value string, siteid uint64) ([]*model.Word, error) {
 	var words []*model.Word
+	query := "value LIKE ?"
+	if siteid > 0 {
+		query += " AND site_id = ?"
+	}
 
-	result := w.db.Where("value LIKE ?", fmt.Sprintf("%%%s%%", value)).Find(&words)
+	result := w.db.Preload("Ref").Where(query, fmt.Sprintf("%%%s%%", value)).Find(&words)
 
 	if result.Error != nil {
 		return words, result.Error

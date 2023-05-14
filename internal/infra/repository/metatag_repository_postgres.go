@@ -27,16 +27,23 @@ func (m *MetaTagRepositoryPostgres) Create(metatag *model.MetaTag) error {
 
 func (m *MetaTagRepositoryPostgres) FindBySiteID(id uint64) ([]*model.MetaTag, error) {
 	var metatags []*model.MetaTag
-	result := m.db.Where("site_id = ?", id).Find(&metatags)
+	result := m.db.Preload("Ref").Where("site_id = ?", id).Find(&metatags)
 	if result.Error != nil {
 		return metatags, result.Error
 	}
 
 	return metatags, nil
 }
-func (m *MetaTagRepositoryPostgres) FindByTag(tag string) ([]*model.MetaTag, error) {
+func (m *MetaTagRepositoryPostgres) FindByTag(tag string, siteid uint64) ([]*model.MetaTag, error) {
 	var metatags []*model.MetaTag
-	result := m.db.Where("tag LIKE ?", fmt.Sprintf("%%%s%%", tag)).Find(&metatags)
+	var query string
+	if siteid > 0 {
+		query = fmt.Sprintf("site_id = %d AND tag LIKE ?", siteid)
+	} else {
+		query = "tag LIKE ?"
+	}
+
+	result := m.db.Preload("Ref").Where(query, fmt.Sprintf("%%%s%%", tag)).Find(&metatags)
 
 	if result.Error != nil {
 		return metatags, result.Error

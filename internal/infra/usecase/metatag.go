@@ -32,11 +32,11 @@ func (m *MetaTagUseCase) ExecuteFindBySiteID(id uint64) ([]*model.MetaTag, error
 	return metatags, nil
 }
 
-func (m *MetaTagUseCase) ExecuteFindByTag(tag string) ([]*model.MetaTag, error) {
+func (m *MetaTagUseCase) ExecuteFindByTag(tag string, siteid uint64) ([]*model.MetaTag, error) {
 	if len(tag) == 0 {
 		return []*model.MetaTag{}, errors.New("Tag is empty")
 	}
-	metatags, err := m.metatagRepository.FindByTag(tag)
+	metatags, err := m.metatagRepository.FindByTag(tag, siteid)
 	if err != nil {
 		return metatags, err
 	}

@@ -13,13 +13,13 @@ type SiteRepository interface {
 type MetaTagRepository interface {
 	Create(metatag *MetaTag) error
 	FindBySiteID(id uint64) ([]*MetaTag, error)
-	FindByTag(url string) ([]*MetaTag, error)
+	FindByTag(url string, siteid uint64) ([]*MetaTag, error)
 	FindAll() ([]*MetaTag, error)
 }
 type WordRepository interface {
 	Create(word *Word) error
 	FindBySiteID(id uint64) ([]*Word, error)
-	FindByValue(url string) ([]*Word, error)
+	FindByValue(url string, siteid uint64) ([]*Word, error)
 	FindAll() ([]*Word, error)
 }
 
