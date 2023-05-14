@@ -36,11 +36,9 @@ func (m *MetaTagRepositoryPostgres) FindBySiteID(id uint64) ([]*model.MetaTag, e
 }
 func (m *MetaTagRepositoryPostgres) FindByTag(tag string, siteid uint64) ([]*model.MetaTag, error) {
 	var metatags []*model.MetaTag
-	var query string
+	query := "tag LIKE ?"
 	if siteid > 0 {
-		query = fmt.Sprintf("site_id = %d AND tag LIKE ?", siteid)
-	} else {
-		query = "tag LIKE ?"
+		query += " AND site_id = ?"
 	}
 
 	result := m.db.Preload("Ref").Where(query, fmt.Sprintf("%%%s%%", tag)).Find(&metatags)
