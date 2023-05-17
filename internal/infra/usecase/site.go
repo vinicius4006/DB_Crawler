@@ -49,3 +49,8 @@ func (c *SiteUseCase) ExecuteFindAll() ([]*model.Site, error) {
 	}
 	return sites, nil
 }
+
+func (c *SiteUseCase) ExecuteUpdate(site *model.Site) error {
+	err := c.siteRepository.Update(site)
+	return err
+}

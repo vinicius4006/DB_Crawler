@@ -40,7 +40,9 @@ func (w *WordRepositoryPostgres) FindByValue(value string, siteid uint64) ([]*mo
 		query += " AND site_id = ?"
 	}
 
-	result := w.db.Preload("Ref").Where(query, fmt.Sprintf("%%%s%%", value)).Find(&words)
+	result := w.db.Preload("Ref", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, url")
+	}).Where(query, fmt.Sprintf("%%%s%%", value)).Find(&words)
 
 	if result.Error != nil {
 		return words, result.Error
@@ -55,4 +57,13 @@ func (w *WordRepositoryPostgres) FindAll() ([]*model.Word, error) {
 		return words, result.Error
 	}
 	return words, nil
+}
+
+func (w *WordRepositoryPostgres) Update(word *model.Word) error {
+	result := w.db.Model(word).Where("id = ? AND site_id = ?", word.ID, word.SiteID).Updates(&word)
+
+	if result.Error != nil {
+		return errors.New(fmt.Sprintf("Erro ao atualizar: %v", result.Error))
+	}
+	return nil
 }

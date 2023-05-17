@@ -42,16 +42,21 @@ func main() {
 	//
 	handlers := web.NewHandlers(siteUseCase, metaTagUseCase, wordUseCase)
 	r := mux.NewRouter()
-	r.HandleFunc("/api/sites", handlers.CreateSiteHandler).Methods("POST")
-	r.HandleFunc("/api/sites/{id}", handlers.GetSitesHandler).Methods("GET")
-	r.HandleFunc("/api/sites", handlers.GetSitesHandler).Queries("url", "{url}").Methods("GET")
 
-	r.HandleFunc("/api/metatags", handlers.CreateMetaTagsHandler).Methods("POST")
-	r.HandleFunc("/api/metatags", handlers.GetMetaTagsHandler).Queries("siteid", "{siteid}", "tag", "{tag}").Methods("GET")
+	//Sites Routers
+	r.HandleFunc("/api/sites", handlers.Sites.CreateSiteHandler).Methods("POST")
+	r.HandleFunc("/api/sites", handlers.Sites.UpdateSite).Methods("PATCH")
+	r.HandleFunc("/api/sites/{id}", handlers.Sites.GetSitesHandler).Methods("GET")
+	r.HandleFunc("/api/sites", handlers.Sites.GetSitesHandler).Queries("url", "{url}").Methods("GET")
 
-	r.HandleFunc("/api/words", handlers.CreateWordsHandler).Methods("POST")
-	r.HandleFunc("/api/words", handlers.GetWordsHandler).Queries("siteid", "{siteid}", "value", "{value}").Methods("GET")
+	// MetaTags Routers
+	r.HandleFunc("/api/metatags", handlers.MetaTags.CreateMetaTagsHandler).Methods("POST")
+	r.HandleFunc("/api/metatags", handlers.MetaTags.GetMetaTagsHandler).Queries("siteid", "{siteid}", "tag", "{tag}").Methods("GET")
 
+	// Words Routers
+	r.HandleFunc("/api/words", handlers.Words.CreateWordsHandler).Methods("POST")
+	r.HandleFunc("/api/words", handlers.Words.Update).Methods("PATCH")
+	r.HandleFunc("/api/words", handlers.Words.GetWordsHandler).Queries("siteid", "{siteid}", "value", "{value}").Methods("GET")
 	err = http.ListenAndServe(":5050", r)
 
 	if err != nil {

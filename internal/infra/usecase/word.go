@@ -49,3 +49,11 @@ func (w *WordUseCase) ExecuteFindAll() ([]*model.Word, error) {
 	}
 	return words, nil
 }
+
+func (w *WordUseCase) ExecuteUpdate(word *model.Word) error {
+	err := w.wordrepository.Update(word)
+	if err != nil {
+		return err
+	}
+	return nil
+}

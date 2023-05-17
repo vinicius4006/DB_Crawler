@@ -2,6 +2,7 @@ package repository
 
 import (
 	model "db_crawler/internal/entity"
+	"errors"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -47,4 +48,13 @@ func (s *SiteRepositoryPostgres) FindAll() ([]*model.Site, error) {
 		return sites, result.Error
 	}
 	return sites, nil
+}
+
+func (s *SiteRepositoryPostgres) Update(site *model.Site) error {
+	result := s.db.Model(&site).Where("id = ?", site.ID).Updates(&site)
+
+	if result.Error != nil {
+		return errors.New(fmt.Sprintf("Erro ao atualizar: %v", result.Error))
+	}
+	return nil
 }

@@ -9,6 +9,7 @@ type SiteRepository interface {
 	FindByID(id uint64) (*Site, error)
 	FindByURL(url string) ([]*Site, error)
 	FindAll() ([]*Site, error)
+	Update(site *Site) error
 }
 type MetaTagRepository interface {
 	Create(metatag *MetaTag) error
@@ -21,12 +22,13 @@ type WordRepository interface {
 	FindBySiteID(id uint64) ([]*Word, error)
 	FindByValue(url string, siteid uint64) ([]*Word, error)
 	FindAll() ([]*Word, error)
+	Update(word *Word) error
 }
 
 type Site struct {
 	gorm.Model
 	Url  string
-	Body []byte `gorm:"type:bytea"`
+	Body string `gorm:"type:bytea"`
 }
 
 type MetaTag struct {
@@ -34,7 +36,7 @@ type MetaTag struct {
 	SiteID  uint64
 	Ref     Site `gorm:"foreignKey:SiteID"`
 	Tag     string
-	Content []byte `gorm:"type:bytea"`
+	Content string `gorm:"type:bytea"`
 }
 
 type Word struct {
