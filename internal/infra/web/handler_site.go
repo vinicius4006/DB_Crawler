@@ -15,7 +15,7 @@ type HandlerSites struct {
 	SiteUseCase usecase.SiteUseCase
 }
 
-func (h *HandlerSites) CreateSiteHandler(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerSites) Create(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -40,7 +40,7 @@ func (h *HandlerSites) CreateSiteHandler(w http.ResponseWriter, r *http.Request)
 	json.NewEncoder(w).Encode(output)
 }
 
-func (h *HandlerSites) GetSitesHandler(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerSites) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var output any
 	var err error
@@ -73,7 +73,7 @@ func (h *HandlerSites) GetSitesHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(output)
 }
 
-func (h *HandlerSites) UpdateSite(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerSites) Update(w http.ResponseWriter, r *http.Request) {
 
 	var updateSite model.Site
 	err := json.NewDecoder(r.Body).Decode(&updateSite)

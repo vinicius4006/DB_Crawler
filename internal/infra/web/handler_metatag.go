@@ -14,7 +14,7 @@ type HandlerMetaTags struct {
 	MetaTagUseCase usecase.MetaTagUseCase
 }
 
-func (h *HandlerMetaTags) CreateMetaTagsHandler(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerMetaTags) Create(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -40,7 +40,7 @@ func (h *HandlerMetaTags) CreateMetaTagsHandler(w http.ResponseWriter, r *http.R
 	json.NewEncoder(w).Encode(output)
 }
 
-func (h *HandlerMetaTags) GetMetaTagsHandler(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerMetaTags) Get(w http.ResponseWriter, r *http.Request) {
 
 	var output any
 	var err error

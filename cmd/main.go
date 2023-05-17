@@ -44,19 +44,19 @@ func main() {
 	r := mux.NewRouter()
 
 	//Sites Routers
-	r.HandleFunc("/api/sites", handlers.Sites.CreateSiteHandler).Methods("POST")
-	r.HandleFunc("/api/sites", handlers.Sites.UpdateSite).Methods("PATCH")
-	r.HandleFunc("/api/sites/{id}", handlers.Sites.GetSitesHandler).Methods("GET")
-	r.HandleFunc("/api/sites", handlers.Sites.GetSitesHandler).Queries("url", "{url}").Methods("GET")
+	r.HandleFunc("/api/sites", handlers.Sites.Create).Methods("POST")
+	r.HandleFunc("/api/sites", handlers.Sites.Update).Methods("PATCH")
+	r.HandleFunc("/api/sites/{id}", handlers.Sites.Get).Methods("GET")
+	r.HandleFunc("/api/sites", handlers.Sites.Get).Queries("url", "{url}").Methods("GET")
 
 	// MetaTags Routers
-	r.HandleFunc("/api/metatags", handlers.MetaTags.CreateMetaTagsHandler).Methods("POST")
-	r.HandleFunc("/api/metatags", handlers.MetaTags.GetMetaTagsHandler).Queries("siteid", "{siteid}", "tag", "{tag}").Methods("GET")
+	r.HandleFunc("/api/metatags", handlers.MetaTags.Create).Methods("POST")
+	r.HandleFunc("/api/metatags", handlers.MetaTags.Get).Queries("siteid", "{siteid}", "tag", "{tag}").Methods("GET")
 
 	// Words Routers
-	r.HandleFunc("/api/words", handlers.Words.CreateWordsHandler).Methods("POST")
+	r.HandleFunc("/api/words", handlers.Words.Create).Methods("POST")
 	r.HandleFunc("/api/words", handlers.Words.Update).Methods("PATCH")
-	r.HandleFunc("/api/words", handlers.Words.GetWordsHandler).Queries("siteid", "{siteid}", "value", "{value}").Methods("GET")
+	r.HandleFunc("/api/words", handlers.Words.Get).Queries("siteid", "{siteid}", "value", "{value}").Methods("GET")
 	err = http.ListenAndServe(":5050", r)
 
 	if err != nil {

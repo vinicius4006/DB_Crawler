@@ -14,7 +14,7 @@ type HandlerWords struct {
 	WordUseCase usecase.WordUseCase
 }
 
-func (h *HandlerWords) CreateWordsHandler(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerWords) Create(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -40,7 +40,7 @@ func (h *HandlerWords) CreateWordsHandler(w http.ResponseWriter, r *http.Request
 	json.NewEncoder(w).Encode(output)
 }
 
-func (h *HandlerWords) GetWordsHandler(w http.ResponseWriter, r *http.Request) {
+func (h *HandlerWords) Get(w http.ResponseWriter, r *http.Request) {
 	var output any
 	var err error
 	siteid := r.URL.Query().Get("siteid")
