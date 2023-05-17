@@ -31,7 +31,6 @@ func main() {
 		gorm.DB.Migrator().CreateConstraint(&model.Word{}, "Ref")
 	}
 
-	// Integration
 	siteRepository := repository.NewSiteRepositoryPostgres(gorm.DB)
 	siteUseCase := usecase.NewSiteUseCase(siteRepository)
 	//
