@@ -42,7 +42,7 @@ func (w *WordRepositoryPostgres) FindByValue(value string, siteid uint64) ([]*mo
 
 	result := w.db.Preload("Ref", func(db *gorm.DB) *gorm.DB {
 		return db.Select("id, url")
-	}).Where(query, fmt.Sprintf("%%%s%%", value)).Find(&words)
+	}).Where(query, fmt.Sprintf("%%%s%%", value), siteid).Find(&words)
 
 	if result.Error != nil {
 		return words, result.Error
