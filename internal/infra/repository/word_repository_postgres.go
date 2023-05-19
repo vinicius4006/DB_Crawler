@@ -4,6 +4,7 @@ import (
 	model "db_crawler/internal/entity"
 	"errors"
 	"fmt"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -31,18 +32,35 @@ func (w *WordRepositoryPostgres) FindBySiteID(id uint64) ([]*model.Word, error) 
 	if result.Error != nil {
 		return words, result.Error
 	}
+
 	return words, nil
 }
 func (w *WordRepositoryPostgres) FindByValue(value string, siteid uint64) ([]*model.Word, error) {
 	var words []*model.Word
+	var result *gorm.DB
+
 	query := "value LIKE ?"
-	if siteid > 0 {
-		query += " AND site_id = ?"
+	var conditions []interface{}
+
+	listValue := strings.Split(value, "%")
+
+	for i, v := range listValue {
+		if i != 0 {
+			query += " OR value LIKE ?"
+		}
+		conditions = append(conditions, v)
 	}
 
-	result := w.db.Preload("Ref", func(db *gorm.DB) *gorm.DB {
-		return db.Select("id, url")
-	}).Where(query, fmt.Sprintf("%%%s%%", value), siteid).Find(&words)
+	if siteid > 0 {
+		query += " AND site_id = ?"
+		result = w.db.Preload("Ref", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id, url")
+		}).Where(query, fmt.Sprintf("%%%s%%", value), siteid).Find(&words)
+	} else {
+		result = w.db.Preload("Ref", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id, url")
+		}).Where(query, conditions...).Find(&words)
+	}
 
 	if result.Error != nil {
 		return words, result.Error

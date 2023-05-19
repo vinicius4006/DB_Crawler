@@ -14,7 +14,6 @@ import (
 )
 
 func main() {
-
 	gorm, err := infra.NewDB()
 
 	if err != nil {
