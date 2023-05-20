@@ -5,12 +5,15 @@
     padding: 0px;
 }
 
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+
 .top_site {
     display: flex;
     position: absolute;
     align-items: center;
     justify-content: flex-end;
-    font-family: 'Open Sans', sans-serif;
     width: 100%;
     padding-top: 10px;
 }

@@ -5,11 +5,16 @@
     padding: 0px;
 }
 
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+
+
 .top_site {
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: flex-end;
-    font-family: 'Open Sans', sans-serif;
     width: 100%;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -57,7 +62,7 @@
     text-decoration: underline;
 }
 
-/* --------------  meio ---------------- */
+/* --------------  pesquisa  ---------------- */
 
 
 .top_site input{
@@ -104,4 +109,42 @@
     width: 33px;
     height: 26px;
     background-color: rgba(245, 222, 179, 0);
+}
+
+/* -------- Sites ---------- */
+
+#container{
+    margin: auto;
+    margin-top: 20px;
+    max-width: 1480px;
+}
+
+.container_site{
+    margin-left: 35px;
+    max-width: 600px;
+}
+
+.url{
+    font-size: 18px;
+    padding-top: 10px;
+    padding-bottom: 1px;
+    color: #000000;
+}
+
+.full_url{
+    color: #686868;
+}
+
+.container_site h2{
+    margin-top: 10px;
+    margin-bottom: 7px;
+    color: #2a7afc;
+}
+
+.container_site a{
+    text-decoration: none;
+}
+
+.description{
+    color: #4a4a4a;
 }
