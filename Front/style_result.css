@@ -120,6 +120,7 @@ body{
 }
 
 .container_site{
+    margin-bottom: 20px;
     margin-left: 35px;
     max-width: 600px;
 }
@@ -166,6 +167,7 @@ body{
     z-index: 1;
     transition: 0.5s ease-in-out;
 }
+
 #preload img{
-margin: auto;
+    margin: auto;
 }

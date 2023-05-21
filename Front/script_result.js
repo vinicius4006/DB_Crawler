@@ -7,7 +7,6 @@ function show_results(data) {
         linkcompleto = data[i].Ref.Url
         let linkcurto = extractDomain(linkcompleto)
         container.innerHTML += 
-        '<div id="container">' +
             '<div class="container_site">' +
                 '<a href="'+ linkcompleto +'">' +
                     '<p class="url">'+ linkcurto +'</p>' +
@@ -15,11 +14,10 @@ function show_results(data) {
                     '<h2>Como acessar jogos online</h2>' +
                 '</a>' +
                 '<p class="description">Todos os arquivos de Assistência Técnica - Documentação básica 1. Assistência Técnica - Documentação básica 10. Assistência Técnica - Documentação básica 10 ...</p>' +
-            '</div>' +
-        '</div>'
+            '</div>' 
     }
     container.innerHTML += '<div id="space"></div>'
-    revovePreload()
+    // revovePreload()
 }
 
 function extractDomain(url) {
