@@ -1,23 +1,29 @@
 function show_results(data) {
-    history.pushState(null, null, data['linkpesquisa']);
     console.log(data);
-
     let container = document.getElementById('container')
+
+    // Cria o html com o conteúdo da pesquisa
     for (let i = 0; i < data.length; i++) {
+        // capura o link de cada pagina
         linkcompleto = data[i].Ref.Url
+        // extrai o dominio pricipal
         let linkcurto = extractDomain(linkcompleto)
+
+        // descrição e titulo de cada site
+        descricao = 'variavel da descrição aqui'
+        titulo = 'varialvel do titulo aqui'
+
         container.innerHTML += 
             '<div class="container_site">' +
                 '<a href="'+ linkcompleto +'">' +
                     '<p class="url">'+ linkcurto +'</p>' +
                     '<p class="full_url">'+ linkcompleto +'</p>' +
-                    '<h2>Como acessar jogos online</h2>' +
+                    '<h2>'+ titulo +'</h2>' +
                 '</a>' +
-                '<p class="description">Todos os arquivos de Assistência Técnica - Documentação básica 1. Assistência Técnica - Documentação básica 10. Assistência Técnica - Documentação básica 10 ...</p>' +
+                '<p class="description">'+ descricao +'</p>' +
             '</div>' 
     }
     container.innerHTML += '<div id="space"></div>'
-    // revovePreload()
 }
 
 function extractDomain(url) {
@@ -31,10 +37,6 @@ function extractDomain(url) {
     domain = domain.replace(/^www\./, '');
   
     return domain;
-}
-
-function revovePreload() {
-    // document.getElementById('preload').style.transform = 'translate(0%, -100%)'
 }
 
 var urlParams = new URLSearchParams(window.location.search);
