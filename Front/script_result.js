@@ -1,4 +1,6 @@
 async function search(input) {
+    var inputHTML = document.getElementById('searchinput');
+    inputHTML.value = input;
 	// add aqui o link para o teu servidor de pesquisa
     let link = 'http://localhost:5050/cumae?q=' + input
     
