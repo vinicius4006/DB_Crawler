@@ -1,30 +1,12 @@
-function seach(input) {
+function search(input) {
     let texto = input.value.trim();
 	if (texto == '') {
 		return
 	}
-
-	// add aqui o link para o teu servidor de pesquisa
-    let link = 'http://127.0.0.1:5500/search?q=' + encodeURIComponent(texto).replace(/%20/g, '+')
-    
-	// faz a requisição para o servidor 
-    fetch(link)
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-
-		// tranforma o json em string 
-        let jsonData = JSON.stringify(data)
-
-		// transforma a string em base64
-        let base64Data = btoa(jsonData)
-
+    let textoFormatado = encodeURIComponent(texto).replace(/%20/g, '+');
 		// redireciona para o arquivo result.html passando o resultado da presquisa na url
-        window.location.href = "result.html?q=" + encodeURIComponent(base64Data)
-    })
-    .catch(error => {
-        console.log(error)
-    });    
+        window.location.href = "result.html?q=" + textoFormatado
+    
 }
 
 var input = document.getElementById('searchinput');
@@ -32,12 +14,13 @@ var input = document.getElementById('searchinput');
 // ativa a função pesquisa quando presiona enter
 input.addEventListener('keydown', function(event) {
     if (event.key === 'Enter' || event.code === 'Enter') {
-        seach(input)
+        search(input)
     }
   });
 
 // ativa a função quando aperta o botão pesquisar
 document.getElementById("enviarJson").addEventListener("click", function() {
-    seach(input)
+    search(input)
 });
+
 

@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 
+	cors "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -41,7 +42,12 @@ func main() {
 	//
 	handlers := web.NewHandlers(siteUseCase, metaTagUseCase, wordUseCase)
 	r := mux.NewRouter()
-
+	corsHandler := cors.CORS(
+		cors.AllowedOrigins([]string{"*"}),
+		cors.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"}),
+		cors.AllowedHeaders([]string{"Content-Type", "Authorization"}),
+	)
+	http.Handle("/", corsHandler(r))
 	//Sites Routers
 	r.HandleFunc("/api/sites", handlers.Sites.Create).Methods("POST")
 	r.HandleFunc("/api/sites", handlers.Sites.Update).Methods("PATCH")
@@ -55,7 +61,7 @@ func main() {
 	// Words Routers
 	r.HandleFunc("/api/words", handlers.Words.Create).Methods("POST")
 	r.HandleFunc("/api/words", handlers.Words.Update).Methods("PATCH")
-	r.HandleFunc("/api/words", handlers.Words.Get).Queries("siteid", "{siteid}", "value", "{value}").Methods("GET")
+	r.HandleFunc("/cumae", handlers.Words.Get).Queries("q", "{q}").Methods("GET")
 	err = http.ListenAndServe(":5050", r)
 
 	if err != nil {

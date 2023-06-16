@@ -31,11 +31,11 @@ func (w *WordUseCase) ExecuteFindBySiteID(id uint64) ([]*model.Word, error) {
 	return words, nil
 }
 
-func (w *WordUseCase) ExecuteFindByValue(value string, siteid uint64) ([]*model.Word, error) {
+func (w *WordUseCase) ExecuteFindByValues(value string) ([]*model.Word, error) {
 	if len(value) == 0 {
 		return []*model.Word{}, errors.New("Value is empty")
 	}
-	words, err := w.wordrepository.FindByValue(value, siteid)
+	words, err := w.wordrepository.FindByValues(value)
 	if err != nil {
 		return words, err
 	}

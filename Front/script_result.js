@@ -1,17 +1,37 @@
-function show_results(data) {
-    console.log(data);
+async function search(input) {
+	// add aqui o link para o teu servidor de pesquisa
+    let link = 'http://localhost:5050/cumae?q=' + input
+    
+	// faz a requisição para o servidor 
+    let data = [];
+    try{
+        let response = await fetch(link);
+        data = await response.json();  
+    }catch(error){
+        console.error(error);
+        
+    }
+   return data;
+}
+
+async function show_results(qSearch) {
+    const data = await search(qSearch);
+    const regex = /\/(\w+(?:-\w+)*)\.html$/;
+   
+
     let container = document.getElementById('container')
 
     // Cria o html com o conteúdo da pesquisa
     for (let i = 0; i < data.length; i++) {
         // capura o link de cada pagina
-        linkcompleto = data[i].Ref.Url
+        let linkcompleto = data[i].Ref.Url
         // extrai o dominio pricipal
         let linkcurto = extractDomain(linkcompleto)
-
+      
         // descrição e titulo de cada site
-        descricao = 'variavel da descrição aqui'
-        titulo = 'varialvel do titulo aqui'
+        let descricao = data[i].Ref.Body.substring(500, 1000) + "..." 
+        const match = linkcompleto.match(regex);
+        const titulo = match ? match[1].replace(/-/g, " ").toUpperCase() : "";
 
         container.innerHTML += 
             '<div class="container_site">' +
@@ -40,8 +60,6 @@ function extractDomain(url) {
 }
 
 var urlParams = new URLSearchParams(window.location.search);
-var base64Data = urlParams.get("q");
-var jsonData = atob(base64Data);
-var data = JSON.parse(jsonData);
-
-show_results(data)
+var qSearch = urlParams.get("q");
+console.log("PEGA", qSearch);
+show_results(qSearch)

@@ -20,7 +20,7 @@ type MetaTagRepository interface {
 type WordRepository interface {
 	Create(word *Word) error
 	FindBySiteID(id uint64) ([]*Word, error)
-	FindByValue(url string, siteid uint64) ([]*Word, error)
+	FindByValues(q string) ([]*Word, error)
 	FindAll() ([]*Word, error)
 	Update(word *Word) error
 }

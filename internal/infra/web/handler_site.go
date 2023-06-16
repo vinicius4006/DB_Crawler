@@ -4,6 +4,7 @@ import (
 	model "db_crawler/internal/entity"
 	"db_crawler/internal/infra/usecase"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -45,7 +46,7 @@ func (h *HandlerSites) Get(w http.ResponseWriter, r *http.Request) {
 	var output any
 	var err error
 	url := r.URL.Query().Get("url")
-
+	fmt.Println("MANDA")
 	if v, ok := vars["id"]; ok {
 		parse, _ := strconv.ParseUint(v, 10, 64)
 		output, err = h.SiteUseCase.ExecuteFindByID(parse)
@@ -61,6 +62,7 @@ func (h *HandlerSites) Get(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
+		fmt.Println("ASASSAs")
 		output, err = h.SiteUseCase.ExecuteFindAll()
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

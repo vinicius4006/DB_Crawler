@@ -4,10 +4,8 @@ import (
 	model "db_crawler/internal/entity"
 	"db_crawler/internal/infra/usecase"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 )
 
 type HandlerWords struct {
@@ -43,34 +41,16 @@ func (h *HandlerWords) Create(w http.ResponseWriter, r *http.Request) {
 func (h *HandlerWords) Get(w http.ResponseWriter, r *http.Request) {
 	var output any
 	var err error
-	siteid := r.URL.Query().Get("siteid")
-	value := r.URL.Query().Get("value")
-	fmt.Println(siteid)
-	if len(siteid) > 0 && len(value) == 0 {
-		parse, _ := strconv.ParseUint(siteid, 10, 64)
-		output, err = h.WordUseCase.ExecuteFindBySiteID(parse)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-	} else if len(value) > 0 {
-		var num uint64
-		if len(siteid) > 0 {
-			num, _ = strconv.ParseUint(siteid, 10, 64)
-		}
-		output, err = h.WordUseCase.ExecuteFindByValue(value, num)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-	} else {
-		output, err = h.WordUseCase.ExecuteFindAll()
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
+	q := r.URL.Query().Get("q")
+
+	output, err = h.WordUseCase.ExecuteFindByValues(q)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5500")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)

@@ -35,36 +35,15 @@ func (w *WordRepositoryPostgres) FindBySiteID(id uint64) ([]*model.Word, error) 
 
 	return words, nil
 }
-func (w *WordRepositoryPostgres) FindByValue(value string, siteid uint64) ([]*model.Word, error) {
+func (w *WordRepositoryPostgres) FindByValues(q string) ([]*model.Word, error) {
 	var words []*model.Word
-	var result *gorm.DB
-
-	query := "value LIKE ?"
-	var conditions []interface{}
-
-	listValue := strings.Split(value, "%")
-
-	for i, v := range listValue {
-		if i != 0 {
-			query += " OR value LIKE ?"
-		}
-		conditions = append(conditions, v)
-	}
-
-	if siteid > 0 {
-		query += " AND site_id = ?"
-		result = w.db.Preload("Ref", func(db *gorm.DB) *gorm.DB {
-			return db.Select("id, url")
-		}).Where(query, fmt.Sprintf("%%%s%%", value), siteid).Find(&words)
-	} else {
-		result = w.db.Preload("Ref", func(db *gorm.DB) *gorm.DB {
-			return db.Select("id, url")
-		}).Where(query, conditions...).Find(&words)
-	}
-
+	removeSpaceQ := strings.Trim((q), " ")
+	result := w.db.Preload("Ref").Where("value ILIKE ?", fmt.Sprintf("%%%s%%", removeSpaceQ)).Find(&words)
+	fmt.Println("ESPACO", removeSpaceQ)
 	if result.Error != nil {
 		return words, result.Error
 	}
+
 	return words, nil
 }
 
