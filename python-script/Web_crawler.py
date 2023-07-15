@@ -2,6 +2,20 @@ import threading
 import requests
 from bs4 import BeautifulSoup
 from api_data_base import *
+from collections import Counter
+import re
+
+def criar_vetor_de_termos(soup):
+    body = soup.body
+    texto = body.get_text()
+    texto = re.sub(r'\W+', ' ', texto)
+    texto = re.sub(r'\s+', ' ', texto)
+    texto = texto.lower()
+    termos = texto.split()
+    frequencia = Counter(termos)
+
+    return frequencia
+
 
 def extract_body_content(soup):
     body = soup.find('body')
@@ -12,7 +26,6 @@ def extract_body_content(soup):
     else:
         return ''
  
-
 def get_meta_tags(soup):
     meta_tags = soup.find_all('meta')
     meta_tag_list = []
@@ -22,10 +35,8 @@ def get_meta_tags(soup):
     
     return meta_tag_list
 
-
 def remove_repeated_items(list_links):
     return list(set(list_links))
-
 
 def filter_https_links(list_links):
     filtered_links = []
@@ -42,7 +53,6 @@ def get_links(soup):
             list_links.append(link)
     return list_links
 
-
 def web_crawler(url, profundidade, contador):
     print('\n', contador, url)
 
@@ -57,9 +67,10 @@ def web_crawler(url, profundidade, contador):
     try:
         list_meta_tag = get_meta_tags(soup)
         body = extract_body_content(soup)
-        
+        vetor_de_termos = criar_vetor_de_termos(soup)
         siteid = post_body(url, body)
         post_meta_tags(list_meta_tag, siteid)
+        post_words(siteid, vetor_de_termos)
     except Exception as e:
         print("Erro no Banco de dados:", e, url)
         return
@@ -69,7 +80,6 @@ def web_crawler(url, profundidade, contador):
         return
 
     contador += 1
-    
 
     try:
         list_links = get_links(soup)
@@ -90,10 +100,9 @@ def web_crawler(url, profundidade, contador):
         t.join()
 
     return 'Terminou'
-   
 
 
-a = web_crawler('https://www.folha.uol.com.br', 1, 0)
+a = web_crawler('https://www.estadao.com.br/', 1, 0)
 print(a)
 # web_crawler('https://oglobo.globo.com/', 1, 0)
 # web_crawler('https://www.folha.uol.com.br/', 1, 0)
